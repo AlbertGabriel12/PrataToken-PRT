@@ -454,7 +454,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			".deps/npm/@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol": "ERC20Upgradeable"
+			"contracts/PRTToken_flattened.sol": "ERC20Upgradeable"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -468,52 +468,12 @@
 		"remappings": []
 	},
 	"sources": {
-		".deps/npm/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
-			"keccak256": "0xdb4d24ee2c087c391d587cd17adfe5b3f9d93b3110b1388c2ab6c7c0ad1dcd05",
+		"contracts/PRTToken_flattened.sol": {
+			"keccak256": "0x945dba7c125c7c791139e4c06be9b1a8586deee681c17c4a318692cf06ade6e9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ab7b6d5b9e2b88176312967fe0f0e78f3d9a1422fa5e4b64e2440c35869b5d08",
-				"dweb:/ipfs/QmXKYWWyzcLg1B2k7Sb1qkEXgLCYfXecR9wYW5obRzWP1Q"
-			]
-		},
-		".deps/npm/@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol": {
-			"keccak256": "0xfcd09c2aa8cc3f93e12545454359f901965db312bc03833daf84de0c03e05022",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://07701188648d2ab83dab1037808298585264559bddf243bd8929037adcb984b0",
-				"dweb:/ipfs/QmavmG5REdHCAWsZ8Cag26BCxAq27DRKGxr3uBg5ZYxQ51"
-			]
-		},
-		".deps/npm/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
-			"keccak256": "0xdbef5f0c787055227243a7318ef74c8a5a1108ca3a07f2b3a00ef67769e1e397",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://08e39f23d5b4692f9a40803e53a8156b72b4c1f9902a88cd65ba964db103dab9",
-				"dweb:/ipfs/QmPKn6EYDgpga7KtpkA8wV2yJCYGMtc9K4LkJfhKX2RVSV"
-			]
-		},
-		"@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
-			"keccak256": "0x19fdfb0f3b89a230e7dbd1cf416f1a6b531a3ee5db4da483f946320fc74afc0e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://3490d794728f5bfecb46820431adaff71ba374141545ec20b650bb60353fac23",
-				"dweb:/ipfs/QmPsfxjVpMcZbpE7BH93DzTpEaktESigEw4SmDzkXuJ4WR"
-			]
-		},
-		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
-				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
-			]
-		},
-		"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
-			"keccak256": "0xd6fa4088198f04eef10c5bce8a2f4d60554b7ec4b987f684393c01bf79b94d9f",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://f95ee0bbd4dd3ac730d066ba3e785ded4565e890dbec2fa7d3b9fe3bad9d0d6e",
-				"dweb:/ipfs/QmSLr6bHkPFWT7ntj34jmwfyskpwo97T9jZUrk5sz3sdtR"
+				"bzz-raw://0d392e8d4254230dbe4edd186b14277beecce361352e7e076f62a9a8652aace0",
+				"dweb:/ipfs/QmbqJPkzXFaYXAXyWeZMKCJhTQRmCMPrhuTJt3Ls6tzHoK"
 			]
 		}
 	},

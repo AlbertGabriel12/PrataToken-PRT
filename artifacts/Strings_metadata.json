@@ -1,0 +1,90 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "length",
+						"type": "uint256"
+					}
+				],
+				"name": "StringsInsufficientHexLength",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "StringsInvalidAddressFormat",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "StringsInvalidChar",
+				"type": "error"
+			}
+		],
+		"devdoc": {
+			"details": "String operations.",
+			"errors": {
+				"StringsInsufficientHexLength(uint256,uint256)": [
+					{
+						"details": "The `value` string doesn't fit in the specified `length`."
+					}
+				],
+				"StringsInvalidAddressFormat()": [
+					{
+						"details": "The string being parsed is not a properly formatted address."
+					}
+				],
+				"StringsInvalidChar()": [
+					{
+						"details": "The string being parsed contains characters that are not in scope of the given base."
+					}
+				]
+			},
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/PRTToken_flattened.sol": "Strings"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/PRTToken_flattened.sol": {
+			"keccak256": "0x945dba7c125c7c791139e4c06be9b1a8586deee681c17c4a318692cf06ade6e9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0d392e8d4254230dbe4edd186b14277beecce361352e7e076f62a9a8652aace0",
+				"dweb:/ipfs/QmbqJPkzXFaYXAXyWeZMKCJhTQRmCMPrhuTJt3Ls6tzHoK"
+			]
+		}
+	},
+	"version": 1
+}

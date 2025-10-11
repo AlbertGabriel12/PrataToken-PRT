@@ -36,11 +36,11 @@ contract PrataToken is
         address operator,
         address upgrader
     ) public initializer {
-        __ERC20_init("Prata Token", "PRT");
+        __ERC20_init("Prata", "PRT");
         __ERC20Burnable_init();
         __ERC20Pausable_init();
         __AccessControl_init();
-        __ERC20Permit_init("Prata Token");
+        __ERC20Permit_init("Prata");
         __UUPSUpgradeable_init();
 
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);

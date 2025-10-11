@@ -1,0 +1,131 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "currentNonce",
+						"type": "uint256"
+					}
+				],
+				"name": "InvalidAccountNonce",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidInitialization",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotInitializing",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint64",
+						"name": "version",
+						"type": "uint64"
+					}
+				],
+				"name": "Initialized",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "nonces",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Provides tracking nonces for addresses. Nonces will only increment.",
+			"errors": {
+				"InvalidAccountNonce(address,uint256)": [
+					{
+						"details": "The nonce used for an `account` is not the expected current nonce."
+					}
+				],
+				"InvalidInitialization()": [
+					{
+						"details": "The contract is already initialized."
+					}
+				],
+				"NotInitializing()": [
+					{
+						"details": "The contract is not initializing."
+					}
+				]
+			},
+			"events": {
+				"Initialized(uint64)": {
+					"details": "Triggered when the contract has been initialized or reinitialized."
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"nonces(address)": {
+					"details": "Returns the next unused nonce for an address."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/PRTToken_flattened.sol": "NoncesUpgradeable"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/PRTToken_flattened.sol": {
+			"keccak256": "0x945dba7c125c7c791139e4c06be9b1a8586deee681c17c4a318692cf06ade6e9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0d392e8d4254230dbe4edd186b14277beecce361352e7e076f62a9a8652aace0",
+				"dweb:/ipfs/QmbqJPkzXFaYXAXyWeZMKCJhTQRmCMPrhuTJt3Ls6tzHoK"
+			]
+		}
+	},
+	"version": 1
+}

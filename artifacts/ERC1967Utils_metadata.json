@@ -1,0 +1,118 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "ERC1967InvalidAdmin",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "beacon",
+						"type": "address"
+					}
+				],
+				"name": "ERC1967InvalidBeacon",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "implementation",
+						"type": "address"
+					}
+				],
+				"name": "ERC1967InvalidImplementation",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ERC1967NonPayable",
+				"type": "error"
+			}
+		],
+		"devdoc": {
+			"details": "This library provides getters and event emitting update functions for https://eips.ethereum.org/EIPS/eip-1967[ERC-1967] slots.",
+			"errors": {
+				"ERC1967InvalidAdmin(address)": [
+					{
+						"details": "The `admin` of the proxy is invalid."
+					}
+				],
+				"ERC1967InvalidBeacon(address)": [
+					{
+						"details": "The `beacon` of the proxy is invalid."
+					}
+				],
+				"ERC1967InvalidImplementation(address)": [
+					{
+						"details": "The `implementation` of the proxy is invalid."
+					}
+				],
+				"ERC1967NonPayable()": [
+					{
+						"details": "An upgrade function sees `msg.value > 0` that may be lost."
+					}
+				]
+			},
+			"kind": "dev",
+			"methods": {},
+			"stateVariables": {
+				"ADMIN_SLOT": {
+					"details": "Storage slot with the admin of the contract. This is the keccak-256 hash of \"eip1967.proxy.admin\" subtracted by 1."
+				},
+				"BEACON_SLOT": {
+					"details": "The storage slot of the UpgradeableBeacon contract which defines the implementation for this proxy. This is the keccak-256 hash of \"eip1967.proxy.beacon\" subtracted by 1."
+				},
+				"IMPLEMENTATION_SLOT": {
+					"details": "Storage slot with the address of the current implementation. This is the keccak-256 hash of \"eip1967.proxy.implementation\" subtracted by 1."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/PRTToken_flattened.sol": "ERC1967Utils"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/PRTToken_flattened.sol": {
+			"keccak256": "0x945dba7c125c7c791139e4c06be9b1a8586deee681c17c4a318692cf06ade6e9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0d392e8d4254230dbe4edd186b14277beecce361352e7e076f62a9a8652aace0",
+				"dweb:/ipfs/QmbqJPkzXFaYXAXyWeZMKCJhTQRmCMPrhuTJt3Ls6tzHoK"
+			]
+		}
+	},
+	"version": 1
+}

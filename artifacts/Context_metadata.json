@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "Provides information about the current execution context, including the sender of the transaction and its data. While these are generally available via msg.sender and msg.data, they should not be accessed in such a direct manner, since when dealing with meta-transactions the account sending and paying for execution may not be the actual sender (as far as an application is concerned). This contract is only required for intermediate, library-like contracts.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/VestingVault_flattened.sol": "Context"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/VestingVault_flattened.sol": {
+			"keccak256": "0xed830341214f6be91a3ab1f60abc98b8a07ab2cd294701e66769dedcb281662d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c1ebf2909ed699273723bf18774bb950cceeb02f6cd180ab22ad21bcfa104634",
+				"dweb:/ipfs/QmQ8ghDAFQN6PRgEsFJ3JhPBMRZKc4M9UTa9gQv11CFbxz"
+			]
+		}
+	},
+	"version": 1
+}
