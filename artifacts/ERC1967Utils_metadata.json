@@ -106,11 +106,11 @@
 	},
 	"sources": {
 		"contracts/PRTToken_flattened.sol": {
-			"keccak256": "0x945dba7c125c7c791139e4c06be9b1a8586deee681c17c4a318692cf06ade6e9",
+			"keccak256": "0x19a58f9badb698023c6e0c16bdec1733bb2d1e24975c8bd32b73d4a6bc012894",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0d392e8d4254230dbe4edd186b14277beecce361352e7e076f62a9a8652aace0",
-				"dweb:/ipfs/QmbqJPkzXFaYXAXyWeZMKCJhTQRmCMPrhuTJt3Ls6tzHoK"
+				"bzz-raw://95c90e7bcf703de4c37b5b4b1b1c752bb82fe9ea3acf3447733bec705a9af785",
+				"dweb:/ipfs/QmP5QG1tesCQmBgnbL5yMifNYu29JjGHiotUmydMGeCYEq"
 			]
 		}
 	},

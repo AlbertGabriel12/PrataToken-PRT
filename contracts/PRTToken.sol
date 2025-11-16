@@ -25,6 +25,8 @@ contract PrataToken is
     uint8 public constant DECIMALS = 6;
     uint256 public constant MAX_SUPPLY = 1_000_000_000 * 10 ** DECIMALS; // 1 bilhão com 6 casas decimais
 
+    uint256[50] private __gap;
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -56,13 +58,13 @@ contract PrataToken is
     function pause() public onlyRole(PAUSER_ROLE) { _pause(); }
     function unpause() public onlyRole(PAUSER_ROLE) { _unpause(); }
 
-    function mint(address to, uint256 amount) public onlyRole(OPERATOR_ROLE) whenNotPaused() {
-        require(totalSupply() + amount <= MAX_SUPPLY, "Max supply exceeded");
-        _mint(to, amount);
+    function mint(address _to, uint256 _amount) public onlyRole(OPERATOR_ROLE) whenNotPaused() {
+        require(totalSupply() + _amount <= MAX_SUPPLY, "Max supply exceeded");
+        _mint(_to, _amount);
     }
 
-    function burn(uint256 amount) public override onlyRole(OPERATOR_ROLE) whenNotPaused() {
-        _burn(msg.sender, amount);
+    function burn(address _to, uint256 _amount) public onlyRole(OPERATOR_ROLE) whenNotPaused() {
+        _burn(_to, _amount);
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}

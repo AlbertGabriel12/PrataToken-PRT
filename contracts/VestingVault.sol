@@ -20,8 +20,8 @@ contract VestingVault is AccessControl {
         uint128 total;        // total de tokens alocados
         uint128 released;     // já liberados
         uint64  start;        // timestamp do início (segundos)
-        uint64  cliff;        // segundos após start até primeiro desbloqueio
-        uint64  duration;     // segundos totais após start para 100%
+        uint64  cliff;        // segundos após start até primeiro desbloqueio (segundos)
+        uint64  duration;     // segundos totais após start para 100% (segundos)
         bool    revocable;    // pode revogar?
         bool    revoked;      // já foi revogado?
     }
@@ -59,19 +59,30 @@ contract VestingVault is AccessControl {
         // se já revogado, vested é o que já foi liberado (nada mais progride)
         if (g.revoked) return g.released;
 
-        if (block.timestamp < g.start + g.cliff) {
+        uint256 start = uint256(g.start);
+        uint256 cliff = uint256(g.cliff);
+        uint256 duration = uint256(g.duration);
+
+        uint256 cliffTime = start + cliff;
+        uint256 endTime = start + duration;
+
+        if (block.timestamp < cliffTime) {
+            // Antes do cliff: nada
             return 0;
         }
 
-        if (block.timestamp >= g.start + g.duration) {
+        if (block.timestamp >= endTime) {
+            // Depois do fim: 100% vested
             return g.total;
         }
 
-        // linear entre (start+cliff) e (start+duration)
-        uint256 elapsed = block.timestamp - g.start;
-        // Proporção: elapsed / duration
-        // cuidado com precisão — usar Math.mulDiv evita overflow e mantém exatidão
-        return Math.mulDiv(g.total, elapsed, g.duration);
+        // Vesting linear APÓS o cliff:
+        // entre [start + cliff, start + duration]
+        uint256 elapsedAfterCliff = block.timestamp - cliffTime;
+        uint256 vestingDurationAfterCliff = duration - cliff;
+
+        // proporcional de 0 a total ao longo de vestingDurationAfterCliff
+        return Math.mulDiv(g.total, elapsedAfterCliff, vestingDurationAfterCliff);
     }
 
     // ----- Fluxo principal -----

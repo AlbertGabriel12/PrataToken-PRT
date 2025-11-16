@@ -66,11 +66,11 @@
 	},
 	"sources": {
 		"contracts/VestingVault_flattened.sol": {
-			"keccak256": "0xed830341214f6be91a3ab1f60abc98b8a07ab2cd294701e66769dedcb281662d",
+			"keccak256": "0xb4632a7fd8f41a46e52dc233f92f702a2e5195647cf7eea3e7e554029082b06e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c1ebf2909ed699273723bf18774bb950cceeb02f6cd180ab22ad21bcfa104634",
-				"dweb:/ipfs/QmQ8ghDAFQN6PRgEsFJ3JhPBMRZKc4M9UTa9gQv11CFbxz"
+				"bzz-raw://c7ad19318ae097bef8c168735997421270eabc2fcb69861420b7b9051b05084d",
+				"dweb:/ipfs/QmeAJ4KEidHXEJZJBRdWJuk8p3saK7E6PwcokbgABhtc2f"
 			]
 		}
 	},
