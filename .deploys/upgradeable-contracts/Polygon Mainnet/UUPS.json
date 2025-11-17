@@ -1,0 +1,12 @@
+{
+  "id": 137,
+  "network": "Polygon Mainnet",
+  "deployments": {
+    "0x6c010753a93a11988cc66e6f0f3adbd71875b143": {
+      "date": "2025-11-16T15:17:08.763Z",
+      "contractName": "PrataToken",
+      "fork": "london",
+      "implementationAddress": "0xae7513a5E402B565613bAA033BE94fbE091e165f"
+    }
+  }
+}

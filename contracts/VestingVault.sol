@@ -15,15 +15,16 @@ contract VestingVault is AccessControl {
     IERC20 public immutable token;
 
     struct Grant {
-        address beneficiary;
-        address funder;
-        uint128 total;        // total de tokens alocados
-        uint128 released;     // já liberados
-        uint64  start;        // timestamp do início (segundos)
-        uint64  cliff;        // segundos após start até primeiro desbloqueio (segundos)
-        uint64  duration;     // segundos totais após start para 100% (segundos)
-        bool    revocable;    // pode revogar?
-        bool    revoked;      // já foi revogado?
+        address beneficiary;                // quem recebe os tokens
+        address funder;                     // quem fornece os tokens
+        uint128 total;                      // total de tokens alocados
+        uint128 released;                   // já liberados
+        uint64  start;                      // timestamp do início (segundos)
+        uint64  cliff;                      // segundos após start até primeiro desbloqueio (segundos)
+        uint64  duration;                   // segundos totais após start para 100% (segundos)
+        uint16  initialPercentualDeposit;   // percentual *inicial* em basis points (ex: 1000 = 10% | ex: 10000 = 100%)
+        bool    revocable;                  // pode revogar?
+        bool    revoked;                    // já foi revogado?
     }
 
     // grants armazenados em um vetor; referência por ID
@@ -95,6 +96,7 @@ contract VestingVault is AccessControl {
     /// @param cliff       duração do cliff (em segundos) a partir do start
     /// @param duration    duração total (em segundos) a partir do start
     /// @param revocable   se true, VESTING_ADMIN pode revogar; funder também pode ser permitido
+    /// @param initialPercentualDeposit percentual para deposito inicial
     function createGrant(
         address beneficiary,
         address funder,
@@ -102,13 +104,15 @@ contract VestingVault is AccessControl {
         uint64 start,
         uint64 cliff,
         uint64 duration,
-        bool revocable
+        bool revocable,
+        uint16 initialPercentualDeposit
     ) external onlyRole(VESTING_ADMIN_ROLE) returns (uint256 grantId) {
-        require(beneficiary != address(0), "beneficiary=0");
-        require(funder != address(0), "funder=0");
-        require(total > 0, "total=0");
-        require(duration > 0, "duration=0");
-        require(cliff <= duration, "cliff > duration");
+        require(beneficiary != address(0), "beneficiary cant is zero");
+        require(funder != address(0), "funder cant is zero");
+        require(total > 0, "total cant is zero");
+        require(duration > 0, "duration cant is zero");
+        require(cliff <= duration, "cliff must been less than duration");
+        require(initialPercentualDeposit <= 10000, "initialPercentualDeposit must been less than 10000, percentual basisPoint");
 
         // Puxar fundos do funder para o cofre
         token.safeTransferFrom(funder, address(this), total);
@@ -122,12 +126,23 @@ contract VestingVault is AccessControl {
             cliff: cliff,
             duration: duration,
             revocable: revocable,
-            revoked: false
+            revoked: false,
+            initialPercentualDeposit: initialPercentualDeposit
         });
 
         grantId = grants.length;
         grants.push(g);
         grantsByBeneficiary[beneficiary].push(grantId);
+
+        // se initialPercentualDeposit for maior do que zero enviar tokens para endereço
+        uint256 initialDepositAmount = Math.mulDiv(total, initialPercentualDeposit, 10_000);
+        if (initialDepositAmount > 0) {
+            Grant storage gs = grants[grantId];
+            gs.released = uint128(initialDepositAmount);
+            token.safeTransfer(beneficiary, initialDepositAmount);
+            
+            emit TokensReleased(grantId, beneficiary, initialDepositAmount);
+        }
 
         emit GrantCreated(grantId, beneficiary, funder, total);
     }
