@@ -6,18 +6,7 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "contract IERC20",
-						"name": "_token",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "admin",
-						"type": "address"
-					}
-				],
+				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -46,11 +35,69 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					}
+				],
+				"name": "AddressEmptyCode",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "implementation",
+						"type": "address"
+					}
+				],
+				"name": "ERC1967InvalidImplementation",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ERC1967NonPayable",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "FailedCall",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidInitialization",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotInitializing",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "token",
 						"type": "address"
 					}
 				],
 				"name": "SafeERC20FailedOperation",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "UUPSUnauthorizedCallContext",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "slot",
+						"type": "bytes32"
+					}
+				],
+				"name": "UUPSUnsupportedProxiableUUID",
 				"type": "error"
 			},
 			{
@@ -107,6 +154,19 @@
 					}
 				],
 				"name": "GrantRevoked",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint64",
+						"name": "version",
+						"type": "uint64"
+					}
+				],
+				"name": "Initialized",
 				"type": "event"
 			},
 			{
@@ -210,6 +270,19 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "implementation",
+						"type": "address"
+					}
+				],
+				"name": "Upgraded",
+				"type": "event"
+			},
+			{
 				"inputs": [],
 				"name": "DEFAULT_ADMIN_ROLE",
 				"outputs": [
@@ -217,6 +290,32 @@
 						"internalType": "bytes32",
 						"name": "",
 						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "UPGRADER_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "UPGRADE_INTERFACE_VERSION",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -266,19 +365,19 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "start",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "cliff",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "duration",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
 						"internalType": "bool",
@@ -360,29 +459,29 @@
 						"type": "address"
 					},
 					{
-						"internalType": "uint128",
+						"internalType": "uint256",
 						"name": "total",
-						"type": "uint128"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint128",
+						"internalType": "uint256",
 						"name": "released",
-						"type": "uint128"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "start",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "cliff",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint64",
+						"internalType": "uint256",
 						"name": "duration",
-						"type": "uint64"
+						"type": "uint256"
 					},
 					{
 						"internalType": "uint16",
@@ -465,6 +564,37 @@
 						"internalType": "bool",
 						"name": "",
 						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "proxiableUUID",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
 					}
 				],
 				"stateMutability": "view",
@@ -582,6 +712,24 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newImplementation",
+						"type": "address"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					}
+				],
+				"name": "upgradeToAndCall",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -596,13 +744,56 @@
 						"details": "The `account` is missing a role."
 					}
 				],
+				"AddressEmptyCode(address)": [
+					{
+						"details": "There's no code at `target` (it is not a contract)."
+					}
+				],
+				"ERC1967InvalidImplementation(address)": [
+					{
+						"details": "The `implementation` of the proxy is invalid."
+					}
+				],
+				"ERC1967NonPayable()": [
+					{
+						"details": "An upgrade function sees `msg.value > 0` that may be lost."
+					}
+				],
+				"FailedCall()": [
+					{
+						"details": "A call to an address target failed. The target may have reverted."
+					}
+				],
+				"InvalidInitialization()": [
+					{
+						"details": "The contract is already initialized."
+					}
+				],
+				"NotInitializing()": [
+					{
+						"details": "The contract is not initializing."
+					}
+				],
 				"SafeERC20FailedOperation(address)": [
 					{
 						"details": "An operation with an ERC-20 token failed."
 					}
+				],
+				"UUPSUnauthorizedCallContext()": [
+					{
+						"details": "The call is from an unauthorized context."
+					}
+				],
+				"UUPSUnsupportedProxiableUUID(bytes32)": [
+					{
+						"details": "The storage `slot` is unsupported as a UUID."
+					}
 				]
 			},
 			"events": {
+				"Initialized(uint64)": {
+					"details": "Triggered when the contract has been initialized or reinitialized."
+				},
 				"RoleAdminChanged(bytes32,bytes32,bytes32)": {
 					"details": "Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole` `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite {RoleAdminChanged} not being emitted to signal this."
 				},
@@ -611,11 +802,17 @@
 				},
 				"RoleRevoked(bytes32,address,address)": {
 					"details": "Emitted when `account` is revoked `role`. `sender` is the account that originated the contract call:   - if using `revokeRole`, it is the admin role bearer   - if using `renounceRole`, it is the role bearer (i.e. `account`)"
+				},
+				"Upgraded(address)": {
+					"details": "Emitted when the implementation is upgraded."
 				}
 			},
 			"kind": "dev",
 			"methods": {
-				"createGrant(address,address,uint256,uint64,uint64,uint64,bool,uint16)": {
+				"constructor": {
+					"custom:oz-upgrades-unsafe-allow": "constructor"
+				},
+				"createGrant(address,address,uint256,uint256,uint256,uint256,bool,uint16)": {
 					"params": {
 						"beneficiary": "quem receberá o vesting",
 						"cliff": "duração do cliff (em segundos) a partir do start",
@@ -636,6 +833,9 @@
 				"hasRole(bytes32,address)": {
 					"details": "Returns `true` if `account` has been granted `role`."
 				},
+				"proxiableUUID()": {
+					"details": "Implementation of the ERC-1822 {proxiableUUID} function. This returns the storage slot used by the implementation. It is used to validate the implementation's compatibility when performing an upgrade. IMPORTANT: A proxy pointing at a proxiable contract should not be considered proxiable itself, because this risks bricking a proxy that upgrades to it, by delegating to itself until out of gas. Thus it is critical that this function revert if invoked through a proxy. This is guaranteed by the `notDelegated` modifier."
+				},
 				"renounceRole(bytes32,address)": {
 					"details": "Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `callerConfirmation`. May emit a {RoleRevoked} event."
 				},
@@ -644,6 +844,10 @@
 				},
 				"supportsInterface(bytes4)": {
 					"details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+				},
+				"upgradeToAndCall(address,bytes)": {
+					"custom:oz-upgrades-unsafe-allow-reachable": "delegatecall",
+					"details": "Upgrade the implementation of the proxy to `newImplementation`, and subsequently execute the function call encoded in `data`. Calls {_authorizeUpgrade}. Emits an {Upgraded} event."
 				}
 			},
 			"title": "Cofre de Vesting PR_TOKEN (cliff + vesting linear), revogável opcional",
@@ -652,7 +856,7 @@
 		"userdoc": {
 			"kind": "user",
 			"methods": {
-				"createGrant(address,address,uint256,uint64,uint64,uint64,bool,uint16)": {
+				"createGrant(address,address,uint256,uint256,uint256,uint256,bool,uint16)": {
 					"notice": "Cria um grant (funder transfere tokens para o cofre dentro desta função)"
 				},
 				"releasable(uint256)": {
@@ -684,12 +888,52 @@
 		"remappings": []
 	},
 	"sources": {
-		"@openzeppelin/contracts/access/AccessControl.sol": {
-			"keccak256": "0x1a6b4f6b7798ab80929d491b89d5427a9b3338c0fd1acd0ba325f69c6f1646af",
+		"@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol": {
+			"keccak256": "0x85a70e2b1b65e9ba456add364d22b97eb9944083df1c39c0b4bd6a4b5aa386a4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7bb7f346c12a14dc622bc105ce3c47202fbc89f4b153a28a63bb68193297330c",
-				"dweb:/ipfs/QmagwF8P3bUBXwdo159ueEnY9dLSvEWwK24kk2op58egwG"
+				"bzz-raw://d32a33be6ca4d8e89b9e82e3f9cec7a6c4e040534152313ff55da85b8f193059",
+				"dweb:/ipfs/QmeR55L8t2A8xZ1nvT5y4yVWfFbbmpaGAtGBMz3GGNpuyP"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+			"keccak256": "0xdb4d24ee2c087c391d587cd17adfe5b3f9d93b3110b1388c2ab6c7c0ad1dcd05",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ab7b6d5b9e2b88176312967fe0f0e78f3d9a1422fa5e4b64e2440c35869b5d08",
+				"dweb:/ipfs/QmXKYWWyzcLg1B2k7Sb1qkEXgLCYfXecR9wYW5obRzWP1Q"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol": {
+			"keccak256": "0x574a7451e42724f7de29e2855c392a8a5020acd695169466a18459467d719d63",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5bc189f63b639ee173dd7b6fecc39baf7113bf161776aea22b34c57fdd1872ec",
+				"dweb:/ipfs/QmZAf2VtjDLRULqjJkde6LNsxAg12tUqpPqgUQQZbAjgtZ"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol": {
+			"keccak256": "0x2025ccf05f6f1f2fd4e078e552836f525a1864e3854ed555047cd732320ab29b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d27f4b23c2dee42394aebaf42bf238285230f472dfd3282a39c3f000ec28214f",
+				"dweb:/ipfs/QmQa3DnvccwdWJeWrjgXPnFMTWbzWQWR39hVqC7eEwo2PC"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
+			"keccak256": "0xdbef5f0c787055227243a7318ef74c8a5a1108ca3a07f2b3a00ef67769e1e397",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://08e39f23d5b4692f9a40803e53a8156b72b4c1f9902a88cd65ba964db103dab9",
+				"dweb:/ipfs/QmPKn6EYDgpga7KtpkA8wV2yJCYGMtc9K4LkJfhKX2RVSV"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol": {
+			"keccak256": "0x6694b63ddb2c59bbe341c846171798350e8f72fa02189fcdeaca864e28b54e1f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7d945d33e2189ac4e531e4ed228f59ca957b3898c4f9051f4b8c7ae44d72b23a",
+				"dweb:/ipfs/QmRcEwubTe3xyXxthijs5fVzEgUFSxeddjd5PGfhBnkunX"
 			]
 		},
 		"@openzeppelin/contracts/access/IAccessControl.sol": {
@@ -716,12 +960,44 @@
 				"dweb:/ipfs/Qmab9owJoxcA7vJT5XNayCMaUR1qxqj1NDzzisduwaJMcZ"
 			]
 		},
+		"@openzeppelin/contracts/interfaces/IERC1967.sol": {
+			"keccak256": "0xbf2aefe54b76d7f7bcd4f6da1080b7b1662611937d870b880db584d09cea56b5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f5e7e2f12e0feec75296e57f51f82fdaa8bd1551f4b8cc6560442c0bf60f818c",
+				"dweb:/ipfs/QmcW9wDMaQ8RbQibMarfp17a3bABzY5KraWe2YDwuUrUoz"
+			]
+		},
 		"@openzeppelin/contracts/interfaces/IERC20.sol": {
 			"keccak256": "0x1a6221315ce0307746c2c4827c125d821ee796c74a676787762f4778671d4f44",
 			"license": "MIT",
 			"urls": [
 				"bzz-raw://1bb2332a7ee26dd0b0de9b7fe266749f54820c99ab6a3bcb6f7e6b751d47ee2d",
 				"dweb:/ipfs/QmcRWpaBeCYkhy68PR3B4AgD7asuQk7PwkWxrvJbZcikLF"
+			]
+		},
+		"@openzeppelin/contracts/interfaces/draft-IERC1822.sol": {
+			"keccak256": "0x82f757819bf2429a0d4db141b99a4bbe5039e4ef86dfb94e2e6d40577ed5b28b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://37c30ed931e19fb71fdb806bb504cfdb9913b7127545001b64d4487783374422",
+				"dweb:/ipfs/QmUBHpv4hm3ZmwJ4GH8BeVzK4mv41Q6vBbWXxn8HExPXza"
+			]
+		},
+		"@openzeppelin/contracts/proxy/ERC1967/ERC1967Utils.sol": {
+			"keccak256": "0xa1ad192cd45317c788618bef5cb1fb3ca4ce8b230f6433ac68cc1d850fb81618",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b43447bb85a53679d269a403c693b9d88d6c74177dfb35eddca63abaf7cf110a",
+				"dweb:/ipfs/QmXSDmpd4bNZj1PDgegr6C4w1jDaWHXCconC3rYiw9TSkQ"
+			]
+		},
+		"@openzeppelin/contracts/proxy/beacon/IBeacon.sol": {
+			"keccak256": "0x20462ddb2665e9521372c76b001d0ce196e59dbbd989de9af5576cad0bd5628b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f417fd12aeec8fbfaceaa30e3a08a0724c0bc39de363e2acf6773c897abbaf6d",
+				"dweb:/ipfs/QmU4Hko6sApdweVM92CsiuLKkCk8HfyBeutF89PCTz5Tye"
 			]
 		},
 		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
@@ -740,12 +1016,20 @@
 				"dweb:/ipfs/QmbcBmFX66AY6Kbhnd5gx7zpkgqnUafo43XnmayAM7zVdB"
 			]
 		},
-		"@openzeppelin/contracts/utils/Context.sol": {
-			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+		"@openzeppelin/contracts/utils/Address.sol": {
+			"keccak256": "0x6d0ae6e206645341fd122d278c2cb643dea260c190531f2f3f6a0426e77b00c0",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
-				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+				"bzz-raw://032d1201d839435be2c85b72e33206b3ea980c569d6ebf7fa57d811ab580a82f",
+				"dweb:/ipfs/QmeqQjAtMvdZT2tG7zm39itcRJkuwu8AEReK6WRnLJ18DD"
+			]
+		},
+		"@openzeppelin/contracts/utils/Errors.sol": {
+			"keccak256": "0x6afa713bfd42cf0f7656efa91201007ac465e42049d7de1d50753a373648c123",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ba1d02f4847670a1b83dec9f7d37f0b0418d6043447b69f3a29a5f9efc547fcf",
+				"dweb:/ipfs/QmQ7iH2keLNUKgq2xSWcRmuBE5eZ3F5whYAkAGzCNNoEWB"
 			]
 		},
 		"@openzeppelin/contracts/utils/Panic.sol": {
@@ -756,12 +1040,12 @@
 				"dweb:/ipfs/QmVSaVJf9FXFhdYEYeCEfjMVHrxDh5qL4CGkxdMWpQCrqG"
 			]
 		},
-		"@openzeppelin/contracts/utils/introspection/ERC165.sol": {
-			"keccak256": "0x2d9dc2fe26180f74c11c13663647d38e259e45f95eb88f57b61d2160b0109d3e",
+		"@openzeppelin/contracts/utils/StorageSlot.sol": {
+			"keccak256": "0xcf74f855663ce2ae00ed8352666b7935f6cddea2932fdf2c3ecd30a9b1cd0e97",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://81233d1f98060113d9922180bb0f14f8335856fe9f339134b09335e9f678c377",
-				"dweb:/ipfs/QmWh6R35SarhAn4z2wH8SU456jJSYL2FgucfTFgbHJJN4E"
+				"bzz-raw://9f660b1f351b757dfe01438e59888f31f33ded3afcf5cb5b0d9bf9aa6f320a8b",
+				"dweb:/ipfs/QmarDJ5hZEgBtCmmrVzEZWjub9769eD686jmzb2XpSU1cM"
 			]
 		},
 		"@openzeppelin/contracts/utils/introspection/IERC165.sol": {
@@ -789,11 +1073,11 @@
 			]
 		},
 		"contracts/VestingVault.sol": {
-			"keccak256": "0x5ac3909127007947bb95c909d8071b91dfa9ffeb6685cad2cbbe6fe8ef4a0fb4",
+			"keccak256": "0xe7630330260b130d68300f1555888a7109f314e2d677233d6bbe05b1ed0ad3d5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3f60535fd94a3722d6ce479f55a27a0ac5f8f968dd05736eaad0779014ab3f22",
-				"dweb:/ipfs/QmawHbyy8JcU9TLupGet4brVWPqPXo9aomPnYSxcw428Bc"
+				"bzz-raw://3acea7df94c06f6a4a90377c84323657591edade864aae22b1559a86765eefe4",
+				"dweb:/ipfs/QmVjzUxtUA6exjHvoXTCjvoqVmBVpPJJrvaADsokMTifu4"
 			]
 		}
 	},

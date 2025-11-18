@@ -4,24 +4,29 @@ pragma solidity ^0.8.20;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
-import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
 /// @title Cofre de Vesting PR_TOKEN (cliff + vesting linear), revogável opcional
-contract VestingVault is AccessControl {
+contract VestingVault is Initializable, UUPSUpgradeable, AccessControlUpgradeable, ReentrancyGuardUpgradeable {
     using SafeERC20 for IERC20;
 
     bytes32 public constant VESTING_ADMIN_ROLE = keccak256("VESTING_ADMIN_ROLE");
+    bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
-    IERC20 public immutable token;
+    IERC20 public token;
 
     struct Grant {
         address beneficiary;                // quem recebe os tokens
         address funder;                     // quem fornece os tokens
-        uint128 total;                      // total de tokens alocados
-        uint128 released;                   // já liberados
-        uint64  start;                      // timestamp do início (segundos)
-        uint64  cliff;                      // segundos após start até primeiro desbloqueio (segundos)
-        uint64  duration;                   // segundos totais após start para 100% (segundos)
+        uint256 total;                      // total de tokens alocados
+        uint256 released;                   // já liberados
+        uint256 start;                      // timestamp do início (segundos)
+        uint256 cliff;                      // segundos após start até primeiro desbloqueio (segundos)
+        uint256 duration;                   // segundos totais após start para 100% (segundos)
         uint16  initialPercentualDeposit;   // percentual *inicial* em basis points (ex: 1000 = 10% | ex: 10000 = 100%)
         bool    revocable;                  // pode revogar?
         bool    revoked;                    // já foi revogado?
@@ -37,13 +42,26 @@ contract VestingVault is AccessControl {
     event TokensReleased(uint256 indexed grantId, address indexed beneficiary, uint256 amount);
     event GrantRevoked(uint256 indexed grantId, address indexed funder, uint256 refund);
 
-    constructor(IERC20 _token, address admin) {
-        token = _token;
-        _grantRole(DEFAULT_ADMIN_ROLE, admin);
-        _grantRole(VESTING_ADMIN_ROLE, admin);
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
     }
 
-    // ----- View helpers -----
+    function initialize(IERC20 _token, address admin) public initializer {
+        token = _token;
+
+        __UUPSUpgradeable_init();
+        __AccessControl_init();
+        __ReentrancyGuard_init();
+
+        _grantRole(DEFAULT_ADMIN_ROLE, admin);
+        _grantRole(VESTING_ADMIN_ROLE, admin);
+        _grantRole(UPGRADER_ROLE, admin);
+    }
+
+    function _authorizeUpgrade(address newImplementation) internal override onlyRole(UPGRADER_ROLE) {}
+
+    // ----- External Viewers -----
     function countGrants() external view returns (uint256) { return grants.length; }
     function grantsOf(address beneficiary) external view returns (uint256[] memory) {
         return grantsByBeneficiary[beneficiary];
@@ -52,7 +70,11 @@ contract VestingVault is AccessControl {
     /// @notice Quanto está liberável agora (vested - released)
     function releasable(uint256 grantId) public view returns (uint256) {
         Grant memory g = grants[grantId];
-        return _vestedAmount(g) - g.released;
+        uint256 vested = _vestedAmount(g);
+        if (vested <= g.released) {
+            return 0;
+        }
+        return vested - g.released;
     }
 
     /// @notice Curva linear com cliff
@@ -60,16 +82,20 @@ contract VestingVault is AccessControl {
         // se já revogado, vested é o que já foi liberado (nada mais progride)
         if (g.revoked) return g.released;
 
-        uint256 start = uint256(g.start);
-        uint256 cliff = uint256(g.cliff);
-        uint256 duration = uint256(g.duration);
+        // Parte inicial (TGE / depósito inicial)
+        uint256 initial = Math.mulDiv(g.total, g.initialPercentualDeposit, 100_00);
+        uint256 vestingTotal = g.total - initial;
+
+        uint256 start = g.start;
+        uint256 cliff = g.cliff;
+        uint256 duration = g.duration;
 
         uint256 cliffTime = start + cliff;
         uint256 endTime = start + duration;
 
         if (block.timestamp < cliffTime) {
             // Antes do cliff: nada
-            return 0;
+            return initial;
         }
 
         if (block.timestamp >= endTime) {
@@ -77,13 +103,17 @@ contract VestingVault is AccessControl {
             return g.total;
         }
 
-        // Vesting linear APÓS o cliff:
-        // entre [start + cliff, start + duration]
+        // Vesting linear APÓS o cliff para a parte não-inicial
         uint256 elapsedAfterCliff = block.timestamp - cliffTime;
         uint256 vestingDurationAfterCliff = duration - cliff;
+        // em createGrant garantimos cliff < duration
+        uint256 vestedAfterCliff = Math.mulDiv(
+            vestingTotal,
+            elapsedAfterCliff,
+            vestingDurationAfterCliff
+        );
 
-        // proporcional de 0 a total ao longo de vestingDurationAfterCliff
-        return Math.mulDiv(g.total, elapsedAfterCliff, vestingDurationAfterCliff);
+        return initial + vestedAfterCliff;
     }
 
     // ----- Fluxo principal -----
@@ -101,9 +131,9 @@ contract VestingVault is AccessControl {
         address beneficiary,
         address funder,
         uint256 total,
-        uint64 start,
-        uint64 cliff,
-        uint64 duration,
+        uint256 start,
+        uint256 cliff,
+        uint256 duration,
         bool revocable,
         uint16 initialPercentualDeposit
     ) external onlyRole(VESTING_ADMIN_ROLE) returns (uint256 grantId) {
@@ -111,8 +141,8 @@ contract VestingVault is AccessControl {
         require(funder != address(0), "funder cant is zero");
         require(total > 0, "total cant is zero");
         require(duration > 0, "duration cant is zero");
-        require(cliff <= duration, "cliff must been less than duration");
-        require(initialPercentualDeposit <= 10000, "initialPercentualDeposit must been less than 10000, percentual basisPoint");
+        require(cliff < duration, "cliff must been less than duration");
+        require(initialPercentualDeposit <= 10000, "initialPercentualDeposit must been less or equal than 10000, percentual basisPoint");
 
         // Puxar fundos do funder para o cofre
         token.safeTransferFrom(funder, address(this), total);
@@ -120,7 +150,7 @@ contract VestingVault is AccessControl {
         Grant memory g = Grant({
             beneficiary: beneficiary,
             funder: funder,
-            total: uint128(total),
+            total: total,
             released: 0,
             start: start,
             cliff: cliff,
@@ -138,7 +168,7 @@ contract VestingVault is AccessControl {
         uint256 initialDepositAmount = Math.mulDiv(total, initialPercentualDeposit, 10_000);
         if (initialDepositAmount > 0) {
             Grant storage gs = grants[grantId];
-            gs.released = uint128(initialDepositAmount);
+            gs.released = initialDepositAmount;
             token.safeTransfer(beneficiary, initialDepositAmount);
             
             emit TokensReleased(grantId, beneficiary, initialDepositAmount);
@@ -148,33 +178,38 @@ contract VestingVault is AccessControl {
     }
 
     /// @notice Libera tokens já adquiridos (vested) para o beneficiário
-    function release(uint256 grantId) external {
+    function release(uint256 grantId) external nonReentrant {
         Grant storage g = grants[grantId];
         require(!g.revoked, "revoked");
         uint256 amount = releasable(grantId);
         require(amount > 0, "nothing to release");
 
-        g.released += uint128(amount);
+        g.released += amount;
         token.safeTransfer(g.beneficiary, amount);
         emit TokensReleased(grantId, g.beneficiary, amount);
     }
 
     /// @notice Revoga um grant revogável. Devolve o *não-vested* ao funder.
     /// Pode ser chamado pelo ADMIN; se quiser permitir o próprio funder, mantenha o require abaixo.
-    function revoke(uint256 grantId) external onlyRole(VESTING_ADMIN_ROLE) {
+    function revoke(uint256 grantId) external onlyRole(VESTING_ADMIN_ROLE) nonReentrant {
         Grant storage g = grants[grantId];
         require(g.revocable, "not revocable");
         require(!g.revoked, "already revoked");
 
         uint256 vested = _vestedAmount(g);
-        uint256 unreleased = vested - g.released;
+        uint256 unreleased;
+        if (vested > g.released) {
+            unreleased = vested - g.released;
+        } else {
+            unreleased = 0;
+        }
         uint256 refund = g.total - vested; // não-vested
 
         g.revoked = true;
 
         // 1) Pagar qualquer vested pendente ao beneficiário
         if (unreleased > 0) {
-            g.released += uint128(unreleased);
+            g.released += unreleased;
             token.safeTransfer(g.beneficiary, unreleased);
             emit TokensReleased(grantId, g.beneficiary, unreleased);
         }
