@@ -19,7 +19,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/PRTToken_flattened.sol": "StorageSlot"
+			"contracts/VestingVault_flattened.sol": "StorageSlot"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -33,12 +33,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/PRTToken_flattened.sol": {
-			"keccak256": "0x19a58f9badb698023c6e0c16bdec1733bb2d1e24975c8bd32b73d4a6bc012894",
+		"contracts/VestingVault_flattened.sol": {
+			"keccak256": "0x305f03b8a9c382dca9abdd7386564de336e052a27add9623bebc252cfa56db0e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://95c90e7bcf703de4c37b5b4b1b1c752bb82fe9ea3acf3447733bec705a9af785",
-				"dweb:/ipfs/QmP5QG1tesCQmBgnbL5yMifNYu29JjGHiotUmydMGeCYEq"
+				"bzz-raw://d66e7012a7ad72253d14f405f69f3a88444ba9e9456c8f73792cda8ca339034b",
+				"dweb:/ipfs/QmSKGK29cHz1nvxYnaGtdFvNpy8qiwppQ2AFwx4K14ECpJ"
 			]
 		}
 	},
